@@ -1,24 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import React, {useEffect, useState} from 'react';
+import Navbar from './components/Navbar'
+import Characters from './components/Characters'
+import Pagination from './components/Pagination'
+
+
+
 
 function App() {
+
+    const [characters, setCharacters] = useState([]);
+
+    const initialUrl = "https://rickandmortyapi.com/api/character"
+
+    const fetchCharacters = () => {
+      fetch(initialUrl)
+        .then(response => response.json())
+        .then(data => setCharacters(data.results))
+        .catch(error => console.log(error))
+    }
+
+  useEffect(() => {
+    fetchCharacters(initialUrl);
+    }, [])
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <>
+    <Navbar brand="Rick and Morty App"/>
+    <div className="container mt-5">
+      <Pagination/>
+      <Characters characters={characters}/>
     </div>
+    </>
   );
 }
 
